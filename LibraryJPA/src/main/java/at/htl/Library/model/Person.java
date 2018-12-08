@@ -5,6 +5,9 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Person.findById",query = "select p from Person p where p.Id= :Id")
+})
 public class Person {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;

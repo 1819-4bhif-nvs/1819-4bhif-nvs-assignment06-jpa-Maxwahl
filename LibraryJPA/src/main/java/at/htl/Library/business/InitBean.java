@@ -22,10 +22,12 @@ public class InitBean {
     @PostConstruct
     private void init(){
         System.err.print("******** hello");
-        CD cd =new CD("test",9.11,"mozart",123.1);
+        CD cd =new CD("test",9.11,"classic","mozart",123.1);
         em.persist(cd);
         Person p = new Person("Meier");
+        Person p2 = new Person("Hofer");
         em.persist(p);
+        em.persist(p2);
         Exemplar e = new Exemplar(cd, Weariness.undamaged);
         em.persist(e);
         Loan l = new Loan(p,e, LocalDate.now(),LocalDate.now());

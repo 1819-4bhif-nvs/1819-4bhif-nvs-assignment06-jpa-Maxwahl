@@ -8,8 +8,8 @@ public class CD extends Item {
     double runtime;
 
     //region constructors
-    public CD(String name, double price, String composer, double runtime) {
-        super(name, price);
+    public CD(String name, double price,String genre ,String composer, double runtime) {
+        super(name,genre ,price);
         this.composer = composer;
         this.runtime = runtime;
     }

@@ -15,8 +15,9 @@ public abstract class Item {
     double price;
 
     //region constructors
-    public Item(String name, double price) {
+    public Item(String name,String genre, double price) {
         this.name = name;
+        this.genre=genre;
         this.price = price;
     }
 
@@ -50,5 +51,12 @@ public abstract class Item {
         this.price = price;
     }
 
-    //endregion
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+//endregion
 }

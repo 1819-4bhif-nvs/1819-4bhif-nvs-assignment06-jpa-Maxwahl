@@ -5,6 +5,10 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Loan.findUnfinishedByCustomer",query = "select l from Loan l where l.person.Id=:Id and l.doAR IS null"),
+        @NamedQuery(name = "Loan.findById",query = "select l from Loan l where l.Id=:Id")
+})
 public class Loan {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;

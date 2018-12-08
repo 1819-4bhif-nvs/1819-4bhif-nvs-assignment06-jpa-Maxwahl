@@ -8,8 +8,8 @@ public class Book extends Item{
     int pages;
 
     //region constructors
-    public Book(String name, double price, String author, int pages) {
-        super(name, price);
+    public Book(String name, double price,String genre, String author, int pages) {
+        super(name,genre ,price);
         this.author = author;
         this.pages = pages;
     }
