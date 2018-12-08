@@ -13,6 +13,9 @@ public class Book extends Item{
         this.author = author;
         this.pages = pages;
     }
+
+    public Book() {
+    }
     //endregion
 
     //region getter and setter

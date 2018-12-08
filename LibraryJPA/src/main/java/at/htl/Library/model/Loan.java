@@ -1,5 +1,6 @@
 package at.htl.Library.model;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -7,16 +8,18 @@ import java.time.LocalDate;
 public class Loan {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
-    @ManyToOne
+    @JsonbTransient
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE})
     Person person;
     @ManyToOne
-    Item item;
+    Exemplar exemplar;
     LocalDate doT;
+    LocalDate doAR;
     LocalDate doR;
 
-    public Loan(Person person, Item item, LocalDate doT, LocalDate doR) {
+    public Loan(Person person, Exemplar exemplar, LocalDate doT, LocalDate doR) {
         this.person = person;
-        this.item = item;
+        this.exemplar = exemplar;
         this.doT = doT;
         this.doR = doR;
     }
@@ -41,14 +44,6 @@ public class Loan {
         this.person = person;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
     public LocalDate getDoT() {
         return doT;
     }
@@ -64,5 +59,22 @@ public class Loan {
     public void setDoR(LocalDate doR) {
         this.doR = doR;
     }
+
+    public Exemplar getExemplar() {
+        return exemplar;
+    }
+
+    public void setExemplar(Exemplar exemplar) {
+        this.exemplar = exemplar;
+    }
+
+    public LocalDate getDoAR() {
+        return doAR;
+    }
+
+    public void setDoAR(LocalDate doAR) {
+        this.doAR = doAR;
+    }
+
     //endregion
 }

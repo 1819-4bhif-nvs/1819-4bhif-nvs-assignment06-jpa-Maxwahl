@@ -11,6 +11,7 @@ public abstract class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
     String name;
+    String genre;
     double price;
 
     //region constructors

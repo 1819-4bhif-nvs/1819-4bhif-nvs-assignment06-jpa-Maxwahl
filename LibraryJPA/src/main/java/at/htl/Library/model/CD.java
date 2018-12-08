@@ -1,6 +1,6 @@
 package at.htl.Library.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class CD extends Item {
@@ -12,6 +12,9 @@ public class CD extends Item {
         super(name, price);
         this.composer = composer;
         this.runtime = runtime;
+    }
+
+    public CD() {
     }
     //endregion
 
