@@ -12,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("loans")
@@ -54,7 +55,9 @@ public class LoanEndpoint {
         TypedQuery<Exemplar> exemplarTypedQuery = em.createQuery("Select e from Exemplar e where  e.Id=:Id",Exemplar.class);
         exemplarTypedQuery.setParameter("Id",(long)eid);
         Exemplar e = exemplarTypedQuery.getSingleResult();
-        Loan l = new Loan(p,e,LocalDate.now(),LocalDate.now().plusDays(5));
+        List<Exemplar> exemplars = new ArrayList<>();
+        exemplars.add(e);
+        Loan l = new Loan(p,exemplars,LocalDate.now(),LocalDate.now().plusDays(5));
         em.persist(l);
         return Response.status(201).entity(l).build();
     }

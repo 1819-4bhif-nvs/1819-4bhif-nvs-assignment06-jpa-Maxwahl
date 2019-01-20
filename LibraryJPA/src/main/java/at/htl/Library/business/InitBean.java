@@ -1,6 +1,7 @@
 package at.htl.Library.business;
 
 import at.htl.Library.model.*;
+import at.htl.Library.model.Exemplar;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -8,6 +9,8 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Startup
 @Singleton
@@ -30,7 +33,9 @@ public class InitBean {
         em.persist(p2);
         Exemplar e = new Exemplar(cd, Weariness.undamaged);
         em.persist(e);
-        Loan l = new Loan(p,e, LocalDate.now(),LocalDate.now());
+        List<Exemplar> exemplars = new ArrayList<>();
+        exemplars.add(e);
+        Loan l = new Loan(p,exemplars, LocalDate.now(),LocalDate.now());
         em.persist(l);
     }
 }
