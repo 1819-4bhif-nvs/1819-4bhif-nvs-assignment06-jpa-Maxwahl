@@ -2,6 +2,8 @@ package at.htl.Library.model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -13,12 +15,15 @@ public abstract class Item {
     String name;
     String genre;
     double price;
+    @OneToMany(mappedBy = "item",fetch = FetchType.EAGER,cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE})
+    List<Exemplar> exemplars;
 
     //region constructors
     public Item(String name,String genre, double price) {
         this.name = name;
         this.genre=genre;
         this.price = price;
+        exemplars=new ArrayList<>();
     }
 
     public Item() {
@@ -57,6 +62,9 @@ public abstract class Item {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+    public void addExemplar(Exemplar exemplar){
+        this.exemplars.add(exemplar);
     }
 //endregion
 }
