@@ -1,24 +1,23 @@
 package at.htl.Library.rest;
-import at.htl.Library.business.ItemFacade;
-import at.htl.Library.model.Item;
+import at.htl.Library.business.PersonFacade;
 import at.htl.Library.model.Person;
 
-import javax.inject.Inject;
-import javax.persistence.PersistenceException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.List;
+        import javax.inject.Inject;
+        import javax.persistence.PersistenceException;
+        import javax.ws.rs.*;
+        import javax.ws.rs.core.MediaType;
+        import javax.ws.rs.core.Response;
+        import java.util.List;
 
-@Path("items")
-public class ItemEndpoint {
+@Path("persons")
+public class PersonEndpoint {
     @Inject
-    ItemFacade itemFacade;
+    PersonFacade personFacade;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(){
-        List<Item> entities = itemFacade.get();
+        List<Person> entities = personFacade.get();
         return Response.ok().entity(entities).build();
     }
 
@@ -26,7 +25,7 @@ public class ItemEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response get(@PathParam("id") long id){
-        Item entity = itemFacade.get(id);
+        Person entity = personFacade.get(id);
         if(entity != null){
             return Response.ok().entity(entity).build();
         }else{
@@ -37,9 +36,9 @@ public class ItemEndpoint {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") long id){
-        Item entity = itemFacade.get(id);
+        Person entity = personFacade.get(id);
         if(entity != null){
-            itemFacade.remove(entity);
+            personFacade.remove(entity);
         }
         return Response.noContent().build();
     }
@@ -47,9 +46,9 @@ public class ItemEndpoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response post(Item entity){
+    public Response post(Person entity){
         try {
-            entity = itemFacade.save(entity);
+            entity = personFacade.save(entity);
         }catch(PersistenceException e){
             return Response.status(400).build();
         }
@@ -59,10 +58,9 @@ public class ItemEndpoint {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response put(Item entity){
-        entity = itemFacade.update(entity);
+    public Response put(Person entity){
+        entity = personFacade.update(entity);
         return Response.ok().entity(entity).build();
     }
 }
-
 

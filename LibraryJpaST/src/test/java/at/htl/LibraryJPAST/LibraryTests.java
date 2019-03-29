@@ -25,12 +25,12 @@ public class LibraryTests {
     }
     @Test
     public void t01_deleteCustomer(){
-        Response response = tut.path("customers/deleteCustomer/2").request().delete();
+        Response response = tut.path("persons/2").request().delete();
         assertThat(response.getStatus(),is(204));
     }
     @Test
     public void t02_getClassics(){
-        Response response= tut.path("items/getItemsByGenre").queryParam("genre","classic").request(MediaType.APPLICATION_JSON).get();
+        Response response= tut.path("items").request(MediaType.APPLICATION_JSON).get();
         assertThat(response.getStatus(),is(200));
 
 
@@ -51,7 +51,7 @@ public class LibraryTests {
     }
     @Test
     public void t03_getUnfinishedLoans(){
-        Response response= tut.path("loans/getUnfinishedLoansByCustomer/1").request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response response= tut.path("loans/").request(MediaType.APPLICATION_JSON_TYPE).get();
         assertThat(response.getStatus(),is(200));
         JsonArray payload = response.readEntity(JsonArray.class);
 

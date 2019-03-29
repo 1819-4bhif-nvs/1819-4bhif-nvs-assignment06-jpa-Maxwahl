@@ -1,64 +1,67 @@
 package at.htl.Library.rest;
-
-import at.htl.Library.model.Exemplar;
+import at.htl.Library.business.LoanFacade;
 import at.htl.Library.model.Loan;
 import at.htl.Library.model.Person;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("loans")
-@Stateless
 public class LoanEndpoint {
+    @Inject
+    LoanFacade loanFacade;
 
-    @PersistenceContext
-    EntityManager em;
-    @Path("getUnfinishedLoansByCustomer/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUnfinishedLoansByCustomer(@PathParam("id")int id){
-        TypedQuery<Loan> lquery = em.createNamedQuery("Loan.findUnfinishedByCustomer",Loan.class);
-        lquery.setParameter("Id",(long)id);
-        List<Loan> loans = lquery.getResultList();
-        if(loans.size()==0){
-            return Response.status(404).build();
+    public Response list(){
+        List<Loan> entities = loanFacade.get();
+        return Response.ok().entity(entities).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response get(@PathParam("id") long id){
+        Loan entity = loanFacade.get(id);
+        if(entity != null){
+            return Response.ok().entity(entity).build();
+        }else{
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.status(200).entity(loans).build();
     }
 
-    @Path("finishLoan/{id}")
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response finishLoan(@PathParam("id")int id){
-        TypedQuery<Loan> lquery = em.createNamedQuery("Loan.findById",Loan.class);
-        lquery.setParameter("Id",(long)id);
-        Loan l = lquery.getSingleResult();
-        l.setDoAR(LocalDate.now());
-        return Response.status(200).entity(l).build();
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") long id){
+        Loan entity = loanFacade.get(id);
+        if(entity != null){
+            loanFacade.remove(entity);
+        }
+        return Response.noContent().build();
     }
 
-    @Path("createLoan")
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createLoan(@QueryParam("pid") int pid,@QueryParam("eid") int eid){
-        TypedQuery<Person> pquery = em.createNamedQuery("Person.findById",Person.class);
-        pquery.setParameter("Id",(long)pid);
-        Person p = pquery.getSingleResult();
-        TypedQuery<Exemplar> exemplarTypedQuery = em.createQuery("Select e from Exemplar e where  e.Id=:Id",Exemplar.class);
-        exemplarTypedQuery.setParameter("Id",(long)eid);
-        Exemplar e = exemplarTypedQuery.getSingleResult();
-        List<Exemplar> exemplars = new ArrayList<>();
-        exemplars.add(e);
-        Loan l = new Loan(p,exemplars,LocalDate.now(),LocalDate.now().plusDays(5));
-        em.persist(l);
-        return Response.status(201).entity(l).build();
+    public Response post(Loan entity){
+        try {
+            entity = loanFacade.save(entity);
+        }catch(PersistenceException e){
+            return Response.status(400).build();
+        }
+        return Response.ok().entity(entity).build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response put(Loan entity){
+        entity = loanFacade.update(entity);
+        return Response.ok().entity(entity).build();
     }
 }
+

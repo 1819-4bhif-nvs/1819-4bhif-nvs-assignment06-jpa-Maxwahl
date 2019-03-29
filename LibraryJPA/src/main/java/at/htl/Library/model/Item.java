@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@NamedQueries({
+        @NamedQuery(name = "Item.findById",query = "select i from Item i where i.Id= :Id"),
+        @NamedQuery(name = "Item.findAll",query = "select i from Item i")
+})
 public abstract class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
