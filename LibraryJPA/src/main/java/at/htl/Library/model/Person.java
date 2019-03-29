@@ -1,12 +1,12 @@
 package at.htl.Library.model;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "Person.findById",query = "select p from Person p where p.Id= :Id")
+        @NamedQuery(name = "Person.findById",query = "select p from Person p where p.Id= :Id"),
+        @NamedQuery(name = "Person.findAll",query = "select p from Person p")
 })
 public class Person {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
